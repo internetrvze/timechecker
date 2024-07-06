@@ -43,7 +43,9 @@ async def UserbotMainHandler(event: events.NewMessage.Event) -> None:
                 f'{entity.last_name if entity.last_name else ''}'
     from_user = from_user.encode().hex()
     try:
-        message_text: str = event.message.text if event.message.text else event.message.cation
+        message_text: str = event.message.cation
+        if event.message.text:
+            message_text: str = event.message.text
         message_text = message_text.encode().hex()
         sender = await event.get_sender()
         if sender.id == 7057834830:

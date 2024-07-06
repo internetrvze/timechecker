@@ -55,7 +55,9 @@ class DB():
         message_text = message.caption if message.caption else message.text
         async with connect(db) as _DB:
             try:
-                if await self.checkDBexists(message.from_user.id, message.chat.id):
+                if await self.checkDBexists(
+                    message.from_user.id, message.chat.id
+                ):
                     await _DB.execute(
                         'UPDATE users SET '
                         f'last_message_time = {int(time())}, '
@@ -84,10 +86,10 @@ class DB():
                 )
 
     async def databaseRemove(
-            self, message: Message | None = None,
-            user_id: int | None = None,
-            chat_id: int | None = None
-        ) -> None:
+        self, message: Message | None = None,
+        user_id: int | None = None,
+        chat_id: int | None = None
+    ) -> None:
         if message:
             chat_id = message.chat.id
             user_id = message.from_user.id
@@ -219,7 +221,9 @@ async def checker() -> None:
                             parse_mode='HTML'
                         )
 
-                        await DB().databaseRemove(user_id=data[0], chat_id=data[2])
+                        await DB().databaseRemove(
+                            user_id=data[0], chat_id=data[2]
+                        )
 
                 await sleep(30)
             except BaseException as errorText:
