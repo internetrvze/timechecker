@@ -1,0 +1,10 @@
+__pycache__
+.vscode
+env
+.env
+*.db
+*.db-journal
+*.session
+*.session-journal
+.flake8
+*.lock
