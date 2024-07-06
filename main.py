@@ -9,7 +9,7 @@ from time import time
 from os import getenv
 
 
-@lru_cache
+@lru_cache()
 async def loadVariables() -> None:
     global bot, bot_id, db, logger, checker_id
     load_dotenv()
@@ -36,7 +36,7 @@ _runner(loadVariables())
 
 
 class DB():
-    @lru_cache
+    @lru_cache()
     def __init__(self) -> None:
         pass
 
