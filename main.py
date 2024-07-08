@@ -97,7 +97,7 @@ class DB():
         if not user_id and chat_id is not None:
             async with connect(db) as _DB:
                 await _DB.execute(
-                    'DELETE FROM users WHERE'
+                    'DELETE FROM users WHERE '
                     f'chat_id = {chat_id}'
                 )
                 return await _DB.commit()
