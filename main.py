@@ -9,7 +9,7 @@ from time import time
 from os import getenv
 
 
-@lru_cache
+@lru_cache()
 async def loadVariables() -> None:
     global bot, bot_id, db, logger, checker_id
     load_dotenv()
@@ -36,7 +36,7 @@ _runner(loadVariables())
 
 
 class DB():
-    @lru_cache
+    @lru_cache()
     def __init__(self) -> None:
         pass
 
@@ -93,6 +93,14 @@ class DB():
         if message:
             chat_id = message.chat.id
             user_id = message.from_user.id
+
+        if not user_id and chat_id is not None:
+            async with connect(db) as _DB:
+                await _DB.execute(
+                    'DELETE FROM users WHERE'
+                    f'chat_id = {chat_id}'
+                )
+                return await _DB.commit()
 
         if await self.checkDBexists(user_id, chat_id):
             async with connect(db) as _DB:
@@ -198,7 +206,7 @@ async def mainHandler(message: Message) -> None:
         func=lambda message: message.from_user.id == bot_id
     )
 async def leaveAndKickHandler(message: Message) -> None:
-    await DB().datavaseRemove(message)
+    await DB().databaseRemove(chat_id=message.chat.id)
 
 
 async def checker() -> None:
@@ -230,6 +238,8 @@ async def checker() -> None:
                 await logger.asyncLogger(
                     message=errorText, module='TIME-CHECKER'
                 )
+                if 'chat not found' in str(errorText):
+                    await DB().databaseRemove(chat_id=data[2])
 
 
 async def _() -> None:

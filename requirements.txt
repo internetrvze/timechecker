@@ -1,5 +1,5 @@
-python-dotenv==1.0.1
-aiosqlite==0.20.0
 telethon==1.36.0
 telebot==0.0.5
-aiohttp==3.95
+aiosqlite==0.20.0
+python-dotenv==1.0.1
+aiohttp==3.9.5

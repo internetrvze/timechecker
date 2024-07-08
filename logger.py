@@ -1,9 +1,12 @@
 from telebot.async_telebot import AsyncTeleBot
-from asyncio import run as _runner
 from functools import lru_cache
 from dotenv import load_dotenv
 from datetime import datetime
 from os import getenv
+from asyncio import (
+    run as _runner,
+    get_running_loop
+)
 
 
 class ParseMode:
@@ -50,11 +53,24 @@ class Logger():
             self.logTime = f'[{day}.{month}.{year}] [{hour}:{minute}:{second}]'
 
         try:
+            try:
+                loop = get_running_loop()
+            except RuntimeError:
+                loop = None
+
             _runner(
                 self.logger.send_message(
                     self.chat_id,
                     f'{self.logTime} {module}: {log_level}: {message}',
                     parse_mode=parse_mode
+                )
+            ) if not loop else (
+                loop.create_task(
+                    self.logger.send_message(
+                        self.chat_id,
+                        f'{self.logTime} {module}: {log_level}: {message}',
+                        parse_mode=parse_mode
+                    )
                 )
             )
             return True
